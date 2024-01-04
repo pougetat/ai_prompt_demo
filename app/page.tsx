@@ -41,7 +41,7 @@ export default function Home() {
   const [predictionLogs, setPredictionLogs] = useState<string>();
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     const response = await fetch("/api/predictions", {
       method: "POST",
