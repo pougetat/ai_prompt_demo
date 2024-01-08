@@ -13,7 +13,8 @@ export default async function handler(req, res) {
             // This is the text prompt that will be submitted by a form on the frontend
             input: {
                 "image": "https://replicate.delivery/pbxt/JbnAzlvH84NR20HgqUdfnLlMMwwiU8Fv5N3FSjcRXPH6kmmu/org_mid.jpg",
-                "prompt": "A photo of a room, 4k photo, highly detailed",
+                // "prompt": "A photo of a room, 4k photo, highly detailed",
+                "prompt": req.body.prompt,
                 "scheduler": "K_EULER_ANCESTRAL",
                 "num_samples": 1,
                 "guidance_scale": 7.5,
