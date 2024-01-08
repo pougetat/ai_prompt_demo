@@ -10,22 +10,22 @@ export default function ImagePrompt() {
     const [prediction, setPrediction] = useState<Prediction | null>(null);
 
     const handleSubmit = async (e: any) => {
-        console.log("handleSubmit()");
         e.preventDefault();
 
-        /*
         if (uploadedImageURI === "") {
             console.log("Image has not yet been uploaded");
         }
-        */
 
-        const response = await fetch("/api/predictions", {
+        const response = await fetch("/api/predictions/imageprediction", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            prompt: e.target.prompt.value,
+            // prompt: e.target.prompt.value,
+            // We are hardcoding this for now, the model we use for this doesn't seem to be properly trained
+            // and fails often. This prompt has shown to be successful most of the time.
+            prompt: "A van gogh style painting",
             image: uploadedImageURI,
           }),
         });
@@ -47,44 +47,31 @@ export default function ImagePrompt() {
             setError(prediction.detail);
             return;
           }
+          console.log(response);
           setPrediction(prediction);
-          console.log("Setting prediction logs -> prediction = ");
-          console.log(prediction);
             //setPredictionLogs(prediction.logs);
             // console.log(predictionLogs);
         }
     }
 
     const handleUploadImage = async (e: any) => {
-      console.log("handleUploadImage()");
       const selectedFile = (document!.getElementById("input") as HTMLInputElement).files![0];
 
       const reader = new FileReader();
       reader.onload = async (evt) => {
-        console.log(evt.target!.result);
+        const response = await fetch("api/predictions/uploadimage", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            imageBytes: evt.target!.result,
+          })
+        });
+        const responseJson = await response.json();
 
-        console.log("We are about to try and load the image...");
-
-        try {
-          const response = await fetch("api/predictions/uploadimage", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              imageBytes: evt.target!.result,
-            })
-          });
-          console.log("Here is the response...");
-          console.log(response);
-
-          if (response.status === 200) {
-            // This is hardcoded for now
-            setUploadedImageURI("https://www.gstatic.com/webp/gallery3/1.sm.png");
-          }
-        } catch (e) {
-          console.log("THERE WAS A PROBLEM");
-          console.log(e);
+        if (response.status === 200) {
+          setUploadedImageURI(responseJson.imageUri);
         }
       };
       reader.readAsBinaryString(selectedFile);
