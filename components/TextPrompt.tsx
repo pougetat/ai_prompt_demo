@@ -68,10 +68,7 @@ export default function TextPrompt() {
             return;
           }
           setPrediction(prediction);
-          console.log("Setting prediction logs -> prediction = ");
-          console.log(prediction);
           setPredictionLogs(prediction.logs);
-          console.log(predictionLogs);
         }
       };
     

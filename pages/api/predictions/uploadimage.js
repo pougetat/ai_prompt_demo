@@ -38,5 +38,6 @@ export default async function handler(req, res) {
         return;
     }
     res.statusCode = 200;
-    res.end(JSON.stringify({}));
+    // This is hardcoded for now, replicate doesn't like the storage format for firebase
+    res.end(JSON.stringify({ imageUri: "https://www.gstatic.com/webp/gallery3/1.sm.png"}));
 }
